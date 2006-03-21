@@ -1,4 +1,4 @@
-HTML::WikiConverter::MoinMoin version 0.50
+HTML::WikiConverter::MoinMoin version 0.51
 ==========================================
 
 HTML::WikiConverter::MoinMoin adds the MoinMoin dialect to
@@ -21,17 +21,9 @@ There's also a web interface if you're so inclined:
 
   http://diberri.dyndns.org/html2wiki.html
 
-VERSION
+CHANGES IN 0.51
 
-This is HTML::WikiConverter::MoinMoin 0.50.
-
-Prior versions of HTML::WikiConverter supported the MoinMoin dialect
-out of the box. As of 0.50, each dialect was branched off into a
-separate CPAN package.
-
-CHANGES IN 0.50
-
-  * MoinMoin dialect now has its own CPAN package
+  * Fix tests so MoinMoin properly tests and installs
 
 DEPENDENCIES
 

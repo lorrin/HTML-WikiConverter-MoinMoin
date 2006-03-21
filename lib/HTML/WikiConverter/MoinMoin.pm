@@ -5,7 +5,7 @@ use strict;
 
 use base 'HTML::WikiConverter';
 
-our $VERSION = '0.50';
+our $VERSION = '0.51';
 
 =head1 NAME
 

@@ -55,7 +55,6 @@ END_TESTS
 sub runtests {
   my %arg = @_;
 
-  $arg{strip_comments} = 1;
   $arg{wrap_in_html} = 1;
   $arg{base_uri} ||= 'http://www.test.com';
   my $minimal = $arg{minimal} || 0;

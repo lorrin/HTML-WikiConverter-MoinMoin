@@ -1,5 +1,10 @@
 # Change log for HTML::WikiConverter::MoinMoin
 
+version: 0.51
+date:    Tue Mar 21 2006
+changes:
+  - Fix tests that used 'strip_comments' attribute, which no longer exists
+
 version: 0.50
 date:    Tue Jan 10 2006
 changes:
