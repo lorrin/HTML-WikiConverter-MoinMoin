@@ -1,5 +1,5 @@
-HTML::WikiConverter::MoinMoin version 0.51
-==========================================
+HTML::WikiConverter::MoinMoin
+=============================
 
 HTML::WikiConverter::MoinMoin adds the MoinMoin dialect to
 HTML::WikiConverter allowing the conversion of HTML to MoinMoin
@@ -21,13 +21,14 @@ There's also a web interface if you're so inclined:
 
   http://diberri.dyndns.org/html2wiki.html
 
-CHANGES IN 0.51
+CHANGES IN 0.52
 
-  * Fix tests so MoinMoin properly tests and installs
+  * (bug #17813) Implement [[Anchor(s)]]
 
 DEPENDENCIES
 
   * HTML::WikiConverter version 0.50
+  * URI
 
 INSTALLATION
 

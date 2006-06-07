@@ -76,6 +76,13 @@ sub runtests {
     my( $html, $wiki ) = split /__W__\n/, $test;
     $html =~ s/__H__\n//;
 
+    $name =~ s{\s*\:\:(\w+\([^\)]*?\))}{
+      my $method_call = $1;
+      eval "\$wc->$method_call;";
+      die "Failed test call ($name): $@" if $@;
+      '';
+    }ge;
+
     for( $html, $wiki ) { s/^\n+//; s/\n+$// }
     is( $wc->html2wiki($html), $wiki, $name );
   }

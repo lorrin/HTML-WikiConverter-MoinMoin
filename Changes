@@ -1,11 +1,16 @@
 # Change log for HTML::WikiConverter::MoinMoin
 
+version: 0.52
+date:    Wed June 07 15:00:00 EST 2006
+changes:
+  - (bug #17813) implement anchors
+
 version: 0.51
 date:    Tue Mar 21 2006
 changes:
-  - Fix tests that used 'strip_comments' attribute, which no longer exists
+  - (bug #18083) fix tests that used 'strip_comments' attribute, which no longer exists
 
 version: 0.50
 date:    Tue Jan 10 2006
 changes:
-  - Branched from main HTML::WikiConverter codebase.
+  - branched from main HTML::WikiConverter codebase.

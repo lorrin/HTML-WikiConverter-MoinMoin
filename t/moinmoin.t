@@ -238,3 +238,9 @@ __H__
 __W__
 ||<-2 tablestyle="width:100%; background-color:white" id="thing"> thing ||
 || next ||<id="crazy"> crazy ||
+__NEXT__
+anchors (bug #17813) ::enable_anchor_macro(1)
+__H__
+<p><a name="here" href="#here">here</a></p>
+__W__
+[[Anchor(here)]][#here here]

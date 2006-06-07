@@ -4,8 +4,9 @@ use warnings;
 use strict;
 
 use base 'HTML::WikiConverter';
+our $VERSION = '0.52';
 
-our $VERSION = '0.51';
+use URI;
 
 =head1 NAME
 
@@ -75,6 +76,24 @@ sub rules {
   return \%rules;
 }
 
+=head1 ATTRIBUTES
+
+In addition to the regular set of attributes recognized by the
+L<HTML::WikiConverter> constructor, this dialect also accepts the
+following attributes that can be passed into the C<new()>
+constructor. See L<HTML::WikiConverter/ATTRIBUTES> for usage details.
+
+=head2 enable_anchor_macro
+
+Possible values: C<0>, C<1>. Enables C<[[Anchor(s)]]> formatting. See
+L<http://moinmoin.wikiwikiweb.de/HelpOnMacros> for details.
+
+=cut
+
+sub attributes { {
+  enable_anchor_macro => { default => 0 }
+} }
+
 my %att2prop = (
   width => 'width',
   bgcolor => 'background-color',
@@ -130,10 +149,27 @@ sub _li_start {
 
 sub _link {
   my( $self, $node, $rules ) = @_;
+
+  # (bug #17813)
+  my $name = $node->attr('name');
+  return sprintf '[[Anchor(%s)]]', $name if $self->enable_anchor_macro and $name;
+
   my $url = $node->attr('href') || '';
   my $text = $self->get_elem_contents($node) || '';
+
+  # (bug #17813)
+  if( $self->_abs2rel($url) =~ /^#/ ) {
+    $url = $self->_abs2rel($url);
+  }
+
   return $url if $url eq $text;
   return "[$url $text]";
+}
+
+sub _abs2rel {
+  my( $self, $uri ) = @_;
+  return $uri unless $self->base_uri;
+  return URI->new($uri)->rel($self->base_uri)->as_string;
 }
 
 sub _image {
@@ -145,6 +181,13 @@ sub preprocess_node {
   my( $self, $node ) = @_;
   $self->strip_aname($node) if $node->tag eq 'a';
   $self->caption2para($node) if $node->tag eq 'caption';
+
+  # (bug #17813)
+  if( $node->tag eq 'a' and $node->attr('name') ) {
+    my $name = $node->attr('name');
+    $node->preinsert( new HTML::Element('a', name => $name) );
+    $node->attr( name => undef );
+  }
 }
 
 my @protocols = qw( http https mailto );
