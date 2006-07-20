@@ -4,8 +4,9 @@ use warnings;
 use strict;
 
 use base 'HTML::WikiConverter';
-our $VERSION = '0.52';
+our $VERSION = '0.53';
 
+use Params::Validate ':types';
 use URI;
 
 =head1 NAME
@@ -91,7 +92,7 @@ L<http://moinmoin.wikiwikiweb.de/HelpOnMacros> for details.
 =cut
 
 sub attributes { {
-  enable_anchor_macro => { default => 0 }
+  enable_anchor_macro => { default => 0, type => BOOLEAN }
 } }
 
 my %att2prop = (

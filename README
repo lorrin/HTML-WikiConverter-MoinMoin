@@ -19,16 +19,11 @@ Or from the command line:
 
 There's also a web interface if you're so inclined:
 
-  http://diberri.dyndns.org/html2wiki.html
+  http://diberri.dyndns.org/wikipedia/html2wiki/
 
-CHANGES IN 0.52
+CHANGES IN 0.53
 
-  * (bug #17813) Implement [[Anchor(s)]]
-
-DEPENDENCIES
-
-  * HTML::WikiConverter version 0.50
-  * URI
+  * Update for HTML::WikiConverter 0.60
 
 INSTALLATION
 

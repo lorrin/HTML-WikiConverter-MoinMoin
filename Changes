@@ -1,5 +1,12 @@
 # Change log for HTML::WikiConverter::MoinMoin
 
+version: 0.53
+date:    Thu Jul 20 19:00:00 EST 2006
+changes:
+  - add attribute types
+  - require Params::Validate
+  - require HTML::WikiConverter 0.60
+
 version: 0.52
 date:    Wed June 07 15:00:00 EST 2006
 changes:
