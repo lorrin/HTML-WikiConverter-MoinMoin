@@ -21,19 +21,6 @@ There's also a web interface if you're so inclined:
 
   http://diberri.dyndns.org/wikipedia/html2wiki/
 
-CHANGES IN 0.53
-
-  * Update for HTML::WikiConverter 0.60
-
-INSTALLATION
-
-To install this module, run the following commands:
-
-    perl Makefile.PL
-    make
-    make test
-    make install
-
 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
@@ -57,7 +44,7 @@ You can also look for information at:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2006 David J. Iberri
+Copyright (c) David J. Iberri
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

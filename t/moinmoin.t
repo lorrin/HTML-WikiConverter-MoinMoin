@@ -15,7 +15,7 @@ __H__
 <a href="http://google.com">GOOGLE</a><br/>
 NewLine
 __W__
-[http://google.com GOOGLE][[BR]] NewLine
+[[http://google.com|GOOGLE]][[BR]] NewLine
 __NEXT__
 bold
 __H__
@@ -160,31 +160,31 @@ h1
 __H__
 <h1>h1</h1>
 __W__
-== h1 ==
+= h1 =
 __NEXT__
 h2
 __H__
 <h2>h2</h2>
 __W__
-=== h2 ===
+== h2 ==
 __NEXT__
 h3
 __H__
 <h3>h3</h3>
 __W__
-==== h3 ====
+=== h3 ===
 __NEXT__
 h4
 __H__
 <h4>h4</h4>
 __W__
-===== h4 =====
+==== h4 ====
 __NEXT__
 h5
 __H__
 <h5>h5</h5>
 __W__
-====== h5 ======
+===== h5 =====
 __NEXT__
 h6
 __H__
@@ -202,7 +202,7 @@ external links
 __H__
 <html><a href="test.html">thing</a></html>
 __W__
-[http://www.test.com/test.html thing]
+[[http://www.test.com/test.html|thing]]
 __NEXT__
 external link (plain)
 __H__
@@ -239,8 +239,19 @@ __W__
 ||<-2 tablestyle="width:100%; background-color:white" id="thing"> thing ||
 || next ||<id="crazy"> crazy ||
 __NEXT__
+anchors with content (bug #29347) ::enable_anchor_macro(1)
+__H__
+<a id="top">This is the top of the page</a>
+__W__
+<<Anchor(top)>>
+This is the top of the page
+__NEXT__
 anchors (bug #17813) ::enable_anchor_macro(1)
 __H__
-<p><a name="here" href="#here">here</a></p>
+<a id="id-top" name="name-top"></a>
+
+<p><a href="#href-top">Top of page</a></p>
 __W__
-[[Anchor(here)]][#here here]
+<<Anchor(id-top)>>
+
+[[#href-top|Top of page]]

@@ -4,7 +4,7 @@ use warnings;
 use strict;
 
 use base 'HTML::WikiConverter';
-our $VERSION = '0.53';
+our $VERSION = '0.54';
 
 use Params::Validate ':types';
 use URI;
@@ -63,16 +63,15 @@ sub rules {
     tr => { end => "||\n", line_format => 'single' },
     td => { start => \&_td_start, end => ' ', trim => 'both' },
     th => { alias => 'td' },
-  );
 
-  # Headings (h1-h6)
-  my @headings = ( 1..6 );
-  foreach my $level ( @headings ) {
-    my $tag = "h$level";
-    my $affix = ( '=' ) x ($level+1);
-    $affix = '======' if $level == 6;
-    $rules{$tag} = { start => $affix.' ', end => ' '.$affix, block => 1, trim => 'both', line_format => 'single' };
-  }
+    # (bug #40114) http://moinmo.in/HelpOnHeadlines
+    h1 => { start => '= ',      end => ' =',      block => 1, trim => 'both', line_format => 'single' },
+    h2 => { start => '== ',     end => ' ==',     block => 1, trim => 'both', line_format => 'single' },
+    h3 => { start => '=== ',    end => ' ===',    block => 1, trim => 'both', line_format => 'single' },
+    h4 => { start => '==== ',   end => ' ====',   block => 1, trim => 'both', line_format => 'single' },
+    h5 => { start => '===== ',  end => ' =====',  block => 1, trim => 'both', line_format => 'single' },
+    h6 => { start => '====== ', end => ' ======', block => 1, trim => 'both', line_format => 'single' },
+  );
 
   return \%rules;
 }
@@ -151,20 +150,24 @@ sub _li_start {
 sub _link {
   my( $self, $node, $rules ) = @_;
 
-  # (bug #17813)
-  my $name = $node->attr('name');
-  return sprintf '[[Anchor(%s)]]', $name if $self->enable_anchor_macro and $name;
+  # bug #17813 requests anchors; MoinMoin:HelpOnMacros gives new
+  # "<<Anchor(name)>>" syntax for anchors and other macros (this was
+  # previously "[[Anchor(name)]]" sometime prior to 2008-10-01)
+
+  # bug #29347 requests 'id' be favored over 'name'
+  my $anchor_name = $node->attr('id') || $node->attr('name');
+  return sprintf( "<<Anchor(%s)>>\n", $anchor_name ) if $self->enable_anchor_macro and $anchor_name;
 
   my $url = $node->attr('href') || '';
   my $text = $self->get_elem_contents($node) || '';
 
-  # (bug #17813)
+  # bug #17813
   if( $self->_abs2rel($url) =~ /^#/ ) {
     $url = $self->_abs2rel($url);
   }
 
   return $url if $url eq $text;
-  return "[$url $text]";
+  return "[[$url|$text]]";
 }
 
 sub _abs2rel {
@@ -180,23 +183,24 @@ sub _image {
 
 sub preprocess_node {
   my( $self, $node ) = @_;
-  $self->strip_aname($node) if $node->tag eq 'a';
-  $self->caption2para($node) if $node->tag eq 'caption';
+  my $tag = $node->tag || '';
 
-  # (bug #17813)
-  if( $node->tag eq 'a' and $node->attr('name') ) {
-    my $name = $node->attr('name');
-    $node->preinsert( new HTML::Element('a', name => $name) );
-    $node->attr( name => undef );
-  }
+  $self->caption2para($node) if $tag eq 'caption';
+
+  # Find something like <a id="some anchor here" name="or here">and content here</a>
+  if( $node->tag eq 'a' and ( $node->attr('name') or $node->attr('id') ) and !$node->attr('href') and $self->get_elem_contents($node) ) {
+    my $anchor_name = $node->attr('id') || $node->attr('name');
+    $node->preinsert( new HTML::Element('a', name => $anchor_name) );
+    $node->replace_with_content->delete();
+   }
 }
 
 my @protocols = qw( http https mailto );
-my $urls  = '(' . join('|', @protocols) . ')';
-my $ltrs  = '\w';
-my $gunk  = '\/\#\~\:\.\?\+\=\&\%\@\!\-';
-my $punc  = '\.\:\?\-\{\(\)\}';
-my $any   = "${ltrs}${gunk}${punc}";
+my $urls   = '(' . join('|', @protocols) . ')';
+my $ltrs   = '\w';
+my $gunk   = '\/\#\~\:\.\?\+\=\&\%\@\!\-';
+my $punc   = '\.\:\?\-\{\(\)\}';
+my $any    = "${ltrs}${gunk}${punc}";
 my $url_re = "\\b($urls:\[$any\]+?)(?=\[$punc\]*\[^$any\])";
 
 sub postprocess_output {
@@ -247,7 +251,7 @@ L<http://search.cpan.org/dist/HTML-WikiConverter-MoinMoin>
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2006 David J. Iberri, all rights reserved.
+Copyright (c) David J. Iberri, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself.

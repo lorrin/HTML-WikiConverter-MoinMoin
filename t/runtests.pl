@@ -76,15 +76,37 @@ sub runtests {
     my( $html, $wiki ) = split /__W__\n/, $test;
     $html =~ s/__H__\n//;
 
+#    $name =~ s{\s*\:\:(\w+\([^\)]*?\))}{
+#      my $method_call = $1;
+#      eval "\$wc->$method_call;";
+#      die "Failed test call ($name): $@" if $@;
+#      '';
+#    }ge;
+
+    my( $todo, $todo_reason );
     $name =~ s{\s*\:\:(\w+\([^\)]*?\))}{
-      my $method_call = $1;
-      eval "\$wc->$method_call;";
-      die "Failed test call ($name): $@" if $@;
+      my $keyword = $1;
+      if( $keyword =~ /TODO\((\"|\')(.*?)\1/ ) {
+        $todo = 1;
+        $todo_reason = $2;
+      } else {
+        my $method_call = $keyword;
+        eval "\$wc->$method_call;";
+        die "Failed test call ($name): $@" if $@;
+      }
       '';
     }ge;
 
     for( $html, $wiki ) { s/^\n+//; s/\n+$// }
-    is( $wc->html2wiki($html), $wiki, $name );
+
+    if( $todo ) {
+      TODO: {
+        local $TODO = $todo_reason;
+        is( $wc->html2wiki($html), $wiki, $name );
+      }
+    } else {
+      is( $wc->html2wiki($html), $wiki, $name );
+    }
   }
 
   #file_test($wc) unless $minimal;
