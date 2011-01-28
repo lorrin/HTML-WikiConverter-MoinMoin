@@ -178,7 +178,12 @@ sub _abs2rel {
 
 sub _image {
   my( $self, $node, $rules ) = @_;
-  return $node->attr('src') || '';
+  if ($node->attr('src')) {
+    return '{{' . $node->attr('src') . '}}';
+  }
+  else {
+    return '';
+  }
 }
 
 sub preprocess_node {
