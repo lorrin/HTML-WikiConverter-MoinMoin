@@ -166,8 +166,13 @@ sub _link {
     $url = $self->_abs2rel($url);
   }
 
-  return $url if $url eq $text;
-  return "[[$url|$text]]";
+  if( my $title = $self->get_wiki_page($url) ) {
+    return "[[$text]]" if $text eq $title;
+    return "[[$title|$text]]";
+  } else {
+    return $url if $url eq $text;
+    return "[[$url|$text]]";
+  }
 }
 
 sub _abs2rel {
