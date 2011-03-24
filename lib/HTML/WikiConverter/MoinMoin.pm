@@ -52,12 +52,12 @@ sub rules {
 
     li => { start => \&_li_start, trim => 'leading' },
 
-    dl => { line_format => 'multi' },
-    dt => { trim => 'both', end => ':: ' },
+    dl => { line_format => 'multi', block => 1},
+    dt => { trim => 'both', end => ':: ', start => ' ' },
     dd => { trim => 'both' },
 
     hr => { replace => "\n----\n" },
-    br => { replace => '[[BR]]' },
+    br => { replace => '<<BR>>' },
 
     table => { block => 1, line_format => 'multi' },
     tr => { end => "||\n", line_format => 'single' },
